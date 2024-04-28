@@ -1,9 +1,12 @@
 package com.rankillerdy.vnpay.service;
 
 import com.rankillerdy.vnpay.config.Config;
+import com.rankillerdy.vnpay.dto.PaymentResDTO;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -11,7 +14,7 @@ import java.util.*;
 
 @Service
 public class PaymentService {
-    public ResponseEntity<?> createPayment() {
+    public ResponseEntity<?> createPayment() throws UnsupportedEncodingException {
 //        String orderType = "other";
 //        long amount = Integer.parseInt(req.getParameter("amount"))*100;
 //        String bankCode = req.getParameter("bankCode");
@@ -19,8 +22,7 @@ public class PaymentService {
         long amount = 10000*100;
 
         String vnp_TxnRef = Config.getRandomNumber(8);
-        String vnp_IpAddr = Config.getIpAddress(req);
-
+//        String vnp_IpAddr = Config.getIpAddress(req);
         String vnp_TmnCode = Config.vnp_TmnCode;
 
         Map<String, String> vnp_Params = new HashMap<>();
@@ -72,11 +74,12 @@ public class PaymentService {
         String vnp_SecureHash = Config.hmacSHA512(Config.secretKey, hashData.toString());
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = Config.vnp_PayUrl + "?" + queryUrl;
-//        com.google.gson.JsonObject job = new JsonObject();
-//        job.addProperty("code", "00");
-//        job.addProperty("message", "success");
-//        job.addProperty("data", paymentUrl);
-//        Gson gson = new Gson();
-//        resp.getWriter().write(gson.toJson(job));
+
+        PaymentResDTO paymentResDTO = new PaymentResDTO();
+        paymentResDTO.setStatus("ok");
+        paymentResDTO.setMessage("Successfully");
+        paymentResDTO.setUrl(paymentUrl);
+
+        return ResponseEntity.status(HttpStatus.OK).body(paymentResDTO);
     }
 }
