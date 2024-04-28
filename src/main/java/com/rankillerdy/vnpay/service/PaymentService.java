@@ -22,7 +22,7 @@ public class PaymentService {
         long amount = 10000*100;
 
         String vnp_TxnRef = Config.getRandomNumber(8);
-//        String vnp_IpAddr = Config.getIpAddress(req);
+        String vnp_IpAddr = "192.168.1.9";
         String vnp_TmnCode = Config.vnp_TmnCode;
 
         Map<String, String> vnp_Params = new HashMap<>();
@@ -33,8 +33,10 @@ public class PaymentService {
         vnp_Params.put("vnp_CurrCode", "VND");
         vnp_Params.put("vnp_BankCode", "NCB");
         vnp_Params.put("vnp_Locale", "vn");
-
+        vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
+        vnp_Params.put("vnp_OrderType", "100000");
+        vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
         vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
 
 
